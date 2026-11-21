@@ -1,7 +1,10 @@
 # Saturday 21 November 2026 — the world in one image
 
-[![make.fun](https://img.shields.io/badge/make.fun-news--image--20261121-ff6a00)](https://make.fun/r/68mq8j14)
-![Built with Claude Code + Grok Build](https://img.shields.io/badge/built%20with-Claude%20Code%20%2B%20Grok%20Build-555)
+[![make.fun · news-image-20261121](https://make.fun/badge/news-image-20261121.svg)](https://make.fun/bounty/news-image-20261121?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261121)
+[![rank](https://make.fun/badge/news-image-20261121/Teazel-lab/news-image-20261121/rank.svg)](https://make.fun/bounty/news-image-20261121/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261121)
+[![reward](https://make.fun/badge/news-image-20261121/Teazel-lab/news-image-20261121/reward.svg)](https://make.fun/bounty/news-image-20261121?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261121)
+
+Built with Claude Code (code) and Grok Build (research) for [make.fun](https://make.fun/r/68mq8j14).
 
 Entry for the make.fun bounty `news-image-20261121`: sum up one day's world news in a single 1024x1024 image.
 
