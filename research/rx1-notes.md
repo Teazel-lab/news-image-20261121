@@ -1,0 +1,8 @@
+- ICJ finds Myanmar committed genocide against the Rohingya — judgment 19 Nov 2026 (UN News, Reuters).
+- Nikhil Gupta sentenced to 235 months in the Pannun plot — Friday 20 Nov, New York (The Hindu).
+- Cyclone Akvan landfall near Gopalpur — Friday 20 Nov, about 07:30–08:30 IST; Saturday was only the remnant (IMD).
+- India core output +10.9% in October, and Hong Kong CPI 2.2% — both released 20 Nov (Reuters; HK C&SD).
+- Kohat: CTD says three IMP militants killed, and a Chagai IED kills three — both Friday 20 Nov (Dawn).
+- Kim’s school-gear factory tour was Friday 20 Nov (KCNA carried it Saturday). Japan shut new EV-subsidy bids Friday night (Kyodo).
+- Prabowo and Xi met in Shenzhen on Friday 20 Nov; Jakarta cited 35 deals worth $15bn (Reuters).
+- Not treated as done: India–Korea hockey was listed for 19:00 IST; the Karthigai lamp is 24 Nov (SC order 20 Nov).

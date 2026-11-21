@@ -1,0 +1,488 @@
+{
+  "date_label": "Saturday 21 November 2026",
+  "dek": "Ship ablaze off Finland · Tanker hits near Hormuz · Mexico confirms capo arrest · M6.8 Banda Sea quake",
+  "numbers": [
+    {
+      "value": "6.8",
+      "label": "MAGNITUDE\nBANDA SEA QUAKE",
+      "region": "Asia"
+    },
+    {
+      "value": "€40bn",
+      "label": "CUT PROPOSED\nTO EU BUDGET",
+      "region": "Europe"
+    },
+    {
+      "value": "2",
+      "label": "TANKER HITS\nNEAR HORMUZ",
+      "region": "Middle East"
+    },
+    {
+      "value": "17 in",
+      "label": "FLORIDA RAIN\nSINCE TUESDAY",
+      "region": "Americas"
+    },
+    {
+      "value": "$25m",
+      "label": "FIFA GRANT PLAN\nPER CAF MEMBER",
+      "region": "Africa"
+    },
+    {
+      "value": "26",
+      "label": "HOME-BIRTH RALLIES\nACROSS AUSTRALIA",
+      "region": "Oceania"
+    }
+  ],
+  "timeline": [
+    {
+      "t": "03:00",
+      "label": "Basra plant fire"
+    },
+    {
+      "t": "05:00",
+      "label": "First tanker hit, Hormuz"
+    },
+    {
+      "t": "09:42",
+      "label": "M6.8 Banda Sea quake"
+    },
+    {
+      "t": "11:50",
+      "label": "Australia win T20"
+    },
+    {
+      "t": "14:03",
+      "label": "Rutte meets Tusk"
+    },
+    {
+      "t": "14:36",
+      "label": "COP31: still no text"
+    }
+  ],
+  "pictured": [
+    {
+      "n": 1,
+      "id": "gulf-finland-ship",
+      "region": "Europe",
+      "beat": "Conflict",
+      "place": "Gulf of Finland",
+      "caption": "GULF OF FINLAND · SHIP FIRE",
+      "lon": 27.0,
+      "lat": 60.0,
+      "headline": "Drones set Russian cargo ship ablaze off Finland",
+      "subhead": "Sparta II drifts into Finnish waters; Russia says two drones hit it",
+      "status": "confirmed",
+      "tag": "Reuters / Yle",
+      "lead": true
+    },
+    {
+      "n": 2,
+      "id": "hormuz-tanker-strikes",
+      "region": "Middle East",
+      "beat": "Conflict",
+      "place": "Strait of Hormuz",
+      "caption": "HORMUZ · SHIPPING",
+      "lon": 56.25,
+      "lat": 26.18,
+      "headline": "Two tanker hits reported near Strait of Hormuz",
+      "subhead": "UKMTO logs strikes at 05:00 and 05:50 UTC; no crew hurt",
+      "status": "confirmed",
+      "tag": "UKMTO / Reuters",
+      "lead": true
+    },
+    {
+      "n": 3,
+      "id": "meza-flores-confirm",
+      "region": "Americas",
+      "beat": "Justice",
+      "place": "Guasave, Mexico",
+      "caption": "SINALOA · CARTELS",
+      "lon": -108.47,
+      "lat": 25.57,
+      "headline": "Mexico confirms arrest of FBI most-wanted capo",
+      "subhead": "Army names Meza Flores and 2 aides held in Guasave; US had offered $5m",
+      "status": "confirmed",
+      "tag": "SEDENA / CNN",
+      "lead": true
+    },
+    {
+      "n": 4,
+      "id": "banda-sea-quake",
+      "region": "Asia",
+      "beat": "Disaster",
+      "place": "Banda Sea",
+      "caption": "BANDA SEA · QUAKE",
+      "lon": 127.54,
+      "lat": -7.76,
+      "headline": "M6.8 quake under the Banda Sea is felt in Darwin",
+      "subhead": "USGS: 09:42 UTC, 143 km deep; no tsunami threat; 1,600+ felt reports",
+      "status": "confirmed",
+      "tag": "USGS / Geoscience Aus.",
+      "lead": true
+    },
+    {
+      "n": 5,
+      "id": "eu-costa-budget",
+      "region": "Europe",
+      "beat": "Economy",
+      "place": "Brussels",
+      "caption": "BRUSSELS · EU BUDGET",
+      "lon": 4.35,
+      "lat": 50.85,
+      "headline": "Costa proposes €40bn cut to EU's 2028-34 budget",
+      "subhead": "Plan sets €1.582tn and a 3% tax on big digital firms",
+      "status": "confirmed",
+      "tag": "Reuters / FT"
+    },
+    {
+      "n": 6,
+      "id": "basra-hartha-fire",
+      "region": "Middle East",
+      "beat": "Disaster",
+      "place": "Basra, Iraq",
+      "caption": "BASRA · POWER PLANT",
+      "lon": 47.75,
+      "lat": 30.68,
+      "headline": "Basra power-station fire kills at least 4",
+      "subhead": "35 injured; 800 MW Hartha plant shut after dawn blast",
+      "status": "confirmed",
+      "tag": "Reuters / INA"
+    },
+    {
+      "n": 7,
+      "id": "cop31-overtime",
+      "region": "World/Space",
+      "beat": "Climate",
+      "place": "Antalya",
+      "caption": "ANTALYA · COP31",
+      "lon": 30.71,
+      "lat": 36.9,
+      "headline": "COP31 climate talks run past deadline with no deal",
+      "subhead": "No cover text by 14:36 UTC; fossil-fuel wording still split",
+      "status": "confirmed",
+      "tag": "Reuters / AFP"
+    },
+    {
+      "n": 8,
+      "id": "vietnam-land-law",
+      "region": "Asia",
+      "beat": "Politics",
+      "place": "Hanoi",
+      "caption": "HANOI · LAND LAW",
+      "lon": 105.85,
+      "lat": 21.03,
+      "headline": "Vietnam passes law to speed up land seizures",
+      "subhead": "466 of 479 deputies vote yes; in force 1 July 2027",
+      "status": "confirmed",
+      "tag": "Reuters / Vietnam News"
+    },
+    {
+      "n": 9,
+      "id": "tinubu-bayelsa-rescue",
+      "region": "Africa",
+      "beat": "Disaster",
+      "place": "Bayelsa, Nigeria",
+      "caption": "BAYELSA · BOAT CAPSIZE",
+      "lon": 6.26,
+      "lat": 4.92,
+      "headline": "Tinubu orders rescue after Bayelsa boat capsize",
+      "subhead": "Police: Friday's capsize left 4 dead and 24 rescued",
+      "status": "confirmed",
+      "tag": "Presidency / Reuters"
+    },
+    {
+      "n": 10,
+      "id": "caf-infantino-grants",
+      "region": "Africa",
+      "beat": "Sport",
+      "place": "Abuja",
+      "caption": "ABUJA · FOOTBALL",
+      "lon": 7.49,
+      "lat": 9.06,
+      "headline": "CAF backs Infantino; FIFA grants set to triple",
+      "subhead": "Forward grants to rise from $8m to $25m per member if FIFA Council agrees",
+      "status": "confirmed",
+      "tag": "Reuters"
+    },
+    {
+      "n": 11,
+      "id": "florida-flood-shift",
+      "region": "Americas",
+      "beat": "Disaster",
+      "place": "Rockledge, Florida",
+      "caption": "FLORIDA · FLOODS",
+      "lon": -80.73,
+      "lat": 28.35,
+      "headline": "Florida floods spread north; St. Johns tops 1953 mark",
+      "subhead": "NWS: up to 6 more inches Saturday after 17 in since Tuesday",
+      "status": "confirmed",
+      "tag": "AP / NWS"
+    },
+    {
+      "n": 12,
+      "id": "homebirth-rallies",
+      "region": "Oceania",
+      "beat": "Health",
+      "place": "Australia",
+      "caption": "AUSTRALIA · HEALTH",
+      "lon": 149.13,
+      "lat": -35.28,
+      "headline": "Thousands rally across Australia for home births",
+      "subhead": "Rallies in 26 places; over 12,000 registered, ABC says",
+      "status": "confirmed",
+      "tag": "ABC News"
+    }
+  ],
+  "briefs": [
+    {
+      "n": 13,
+      "region": "Europe",
+      "place": "Ukraine",
+      "fact": "Air force: 117 of 148 drones neutralized",
+      "source": "Ukrinform",
+      "status": "claim"
+    },
+    {
+      "n": 14,
+      "region": "Europe",
+      "place": "Warsaw",
+      "fact": "NATO's Rutte meets Tusk after airspace hits",
+      "source": "TVP",
+      "status": "confirmed"
+    },
+    {
+      "n": 15,
+      "region": "Europe",
+      "place": "Kyiv",
+      "fact": "Zelensky calls bridge strikes a fair reply",
+      "source": "BBC",
+      "status": "confirmed"
+    },
+    {
+      "n": 16,
+      "region": "Europe",
+      "place": "EU",
+      "fact": "Von der Leyen: Russian threats less hybrid",
+      "source": "Reuters",
+      "status": "confirmed"
+    },
+    {
+      "n": 17,
+      "region": "Europe",
+      "place": "Brussels",
+      "fact": "EU and Indonesia sign trade pact",
+      "source": "AFP",
+      "status": "confirmed"
+    },
+    {
+      "n": 18,
+      "region": "Europe",
+      "place": "London",
+      "fact": "Miliband: rejoining EU is on the table",
+      "source": "Guardian",
+      "status": "confirmed"
+    },
+    {
+      "n": 19,
+      "region": "Europe",
+      "place": "Scotland",
+      "fact": "−10.6C, UK's coldest night since Jan",
+      "source": "Met Office",
+      "status": "confirmed"
+    },
+    {
+      "n": 20,
+      "region": "Middle East",
+      "place": "Riyadh",
+      "fact": "Saudis say 3 Houthi missiles intercepted",
+      "source": "AFP",
+      "status": "claim"
+    },
+    {
+      "n": 21,
+      "region": "Middle East",
+      "place": "Hormuz",
+      "fact": "IRGC claims it downed two US drones",
+      "source": "Reuters",
+      "status": "claim"
+    },
+    {
+      "n": 22,
+      "region": "Middle East",
+      "place": "Gaza",
+      "fact": "Drone hits aid van, killing 3, medics say",
+      "source": "Al Jazeera",
+      "status": "claim"
+    },
+    {
+      "n": 23,
+      "region": "Middle East",
+      "place": "Tehran",
+      "fact": "Araghchi: nuclear doctrine unchanged",
+      "source": "IRNA",
+      "status": "claim"
+    },
+    {
+      "n": 24,
+      "region": "Africa",
+      "place": "Aswan",
+      "fact": "Sixth Aswan peace forum opens",
+      "source": "Xinhua",
+      "status": "confirmed"
+    },
+    {
+      "n": 25,
+      "region": "Africa",
+      "place": "Abuja",
+      "fact": "CAF approves an under-17 women's AFCON",
+      "source": "CAF",
+      "status": "confirmed"
+    },
+    {
+      "n": 26,
+      "region": "Africa",
+      "place": "Gombe",
+      "fact": "Probe ordered after 3 village deaths",
+      "source": "Daily Trust",
+      "status": "confirmed"
+    },
+    {
+      "n": 27,
+      "region": "Africa",
+      "place": "North Kivu",
+      "fact": "Dawn gunfire shuts Nyabiondo",
+      "source": "Actualite.cd",
+      "status": "confirmed"
+    },
+    {
+      "n": 28,
+      "region": "Asia",
+      "place": "Savar",
+      "fact": "50 more garment factories shut",
+      "source": "Daily Star",
+      "status": "confirmed"
+    },
+    {
+      "n": 29,
+      "region": "Asia",
+      "place": "Manipur",
+      "fact": "Liquor toll rises to 16, officials say",
+      "source": "NDTV",
+      "status": "claim"
+    },
+    {
+      "n": 30,
+      "region": "Asia",
+      "place": "Fukushima",
+      "fact": "Snow cuts off about 1,400 people",
+      "source": "Kyodo",
+      "status": "confirmed"
+    },
+    {
+      "n": 31,
+      "region": "Asia",
+      "place": "Leh",
+      "fact": "Ladakh holds first local polls since 2019",
+      "source": "PTI",
+      "status": "confirmed"
+    },
+    {
+      "n": 32,
+      "region": "Asia",
+      "place": "Ulsan",
+      "fact": "President Lee tours SK's AI data centre",
+      "source": "Yonhap",
+      "status": "confirmed"
+    },
+    {
+      "n": 33,
+      "region": "Asia",
+      "place": "Qinghai",
+      "fact": "M5.9 quake strikes remote north",
+      "source": "USGS",
+      "status": "confirmed"
+    },
+    {
+      "n": 34,
+      "region": "Americas",
+      "place": "Meta, Colombia",
+      "fact": "President says dawn strike killed 5",
+      "source": "EFE",
+      "status": "claim"
+    },
+    {
+      "n": 35,
+      "region": "Americas",
+      "place": "Junín, Peru",
+      "fact": "M5.0 aftershock; no damage reported",
+      "source": "USGS",
+      "status": "confirmed"
+    },
+    {
+      "n": 36,
+      "region": "Americas",
+      "place": "Chile",
+      "fact": "Floods leave 2,032 people cut off in north",
+      "source": "Senapred",
+      "status": "confirmed"
+    },
+    {
+      "n": 37,
+      "region": "Americas",
+      "place": "Buenos Aires",
+      "fact": "Overseas voting opens for Spain's poll",
+      "source": "EFE",
+      "status": "confirmed"
+    },
+    {
+      "n": 38,
+      "region": "Oceania",
+      "place": "Wellington",
+      "fact": "India lead NZ by 118; Rahul makes 136",
+      "source": "AFP",
+      "status": "confirmed"
+    },
+    {
+      "n": 39,
+      "region": "Oceania",
+      "place": "Australia",
+      "fact": "Beat England by 3 wickets in T20",
+      "source": "BBC",
+      "status": "confirmed"
+    },
+    {
+      "n": 40,
+      "region": "Oceania",
+      "place": "Davao",
+      "fact": "Air Niugini jet diverts; all 146 safe",
+      "source": "CAAP",
+      "status": "confirmed"
+    }
+  ],
+  "date_check": {
+    "before": [
+      "Kyiv bridges barrage (20 Nov)",
+      "Kryvyi Rih strike (20 Nov)",
+      "Cyclone Akvan landfall (20 Nov)",
+      "AI stock rout (20 Nov)",
+      "ICJ Rohingya ruling (19 Nov)"
+    ],
+    "later": [
+      "Uruguay BPS vote (22 Nov)",
+      "Spain election (29 Nov)"
+    ]
+  },
+  "sources": [
+    "AP",
+    "Reuters",
+    "AFP",
+    "BBC",
+    "Al Jazeera",
+    "EFE",
+    "Kyodo",
+    "Yonhap",
+    "ABC News",
+    "USGS",
+    "UKMTO"
+  ]
+}
