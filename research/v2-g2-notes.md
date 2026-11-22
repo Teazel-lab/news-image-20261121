@@ -1,0 +1,8 @@
+- Kryvyi Rih double-tap, 7-year-old and a paramedic killed: Friday evening 20 Nov; Kyiv Post updated it that night (23:09 Kyiv time). Saturday stories only revised the wounded count.
+- ICJ finds Myanmar committed genocide against the Rohingya (about 10,000 killed): judgment 19 Nov. UK–EU youth scheme, 100,000 places each way: Brussels summit 20 Nov.
+- Saudi Arabia to store up to 24 million barrels in Japan, Tokyo may buy 8 million: announced 20 Nov. Taiwan’s NT$20,000 universal cash bill: third reading 20 Nov (50–46).
+- Bangkok Criminal Court jails China Railway No. 10’s director over the collapsed audit-office tower: 18 Nov. Bangkok Gen Z rally at Democracy Monument, about 600 people: 20 Nov.
+- Banda Sea quake is the same shock already listed as M6.8 (USGS, felt in Darwin). BMKG’s first figure was 7.2 at 09:42 UTC, later revised; not a second quake. No tsunami.
+- IG Metall’s first full-day German warning strikes in eight years, covering about 3.7 million workers: launched Friday 20 Nov. Costa Concordia captain Schettino left Rebibbia before 20:00 local on Friday 20 Nov.
+- Iran’s underground “missile city” and dual launcher: Ynet dates the unveiling to Friday; Saturday copy conflicts, so it is left out. Spain’s general strike was 11 Nov; Italy’s CGIL general strike was 20 Nov.
+- Same-day correction, not a new story: Savar–Ashulia closures were later put at at least 80 factories, with tear gas in Ashulia’s Kathgora (The Business Standard), so a frozen “50” is an earlier Saturday count. Araghchi’s nuclear line was left as already covered; a same-day Arab News headline says China and Russia oppose a change in Iran’s nuclear doctrine, and Iran Daily quoted him Saturday saying enriched uranium will not leave the country.

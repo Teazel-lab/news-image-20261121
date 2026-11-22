@@ -1,0 +1,8 @@
+- v1 “Junín: M5.0 aftershock; no damage” is dated right (05:12 UTC) but omits the M6.7 mainshock at 00:09 UTC 21 Nov. AP/Indeci on Saturday: 15 hurt, 127 structures, 4 homes destroyed. A later EFE/Indeci note the same day added one hospital death in Huánuco, cause unstated, so that death is not in the label. No other M6+ on 21 Nov UTC besides this and the Banda Sea 6.8 already in v1.
+- Senegal budget-by-decree: Faye signed it 19 Nov, not 21 Nov.
+- Three Salvadoran soldiers killed in Haiti: blast and first reports Friday 20 Nov.
+- Honduras Delta Teams verdicts (3 Americans): Friday 20 Nov.
+- Ethiopia–Eritrea fighting near Badme: reported 12–20 Nov; no fresh 21 Nov clash confirmed.
+- Fiji national drought disaster: declared 18 Nov. Sudan South Kordofan drone strike (7 dead): Thursday, reported 20 Nov.
+- Riemann claim itself was posted Friday 20 Nov; only the Saturday verification is kept, and it is still those groups’ claim.
+- Kenya KDF IED (10 dead) is a 22 Nov report. UN Barbados AI summit opens Monday 23 Nov. BepiColombo’s two orbiters separate 9–10 Dec; capture was 21 Nov. Bitcoin’s slide began Friday; the $55,830 print was 04:13 UTC Saturday. Tupanciretã’s storm hit Friday; only Saturday’s toll (4 dead, 162 hurt) is new.

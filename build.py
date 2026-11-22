@@ -37,6 +37,8 @@ REGIONS = [  # key, label, colour
     ("World/Space", "WORLD / SPACE", "#5e6670"),
 ]
 RSHORT = {"World/Space": "WORLD", "Middle East": "MIDEAST", "Americas": "AMER.", "Oceania": "OCEANIA"}
+LSHORT = {"Europe": "EUROPE", "Americas": "AMER.", "Africa": "AFRICA", "Middle East": "MIDEAST",
+          "Oceania": "OCEANIA", "World/Space": "WORLD"}
 RCOL = {k: c for k, _, c in REGIONS}
 RLAB = {k: l for k, l, _ in REGIONS}
 INHABITED = {"Europe", "Americas", "Asia", "Africa", "Oceania"}
@@ -56,6 +58,11 @@ def rkey(r):
 
 def esc(s):
     return html.escape(str(s), quote=True)
+
+
+def esc_nb(s):
+    """esc(), keeping number ranges such as 37-12, 20-17 or 2028-34 on one line."""
+    return re.sub(r"\d+[-–]\d+", lambda m: f'<span style="white-space:nowrap">{m.group(0)}</span>', esc(s))
 
 
 # ---------------------------------------------------------------- world map
@@ -213,10 +220,11 @@ def world_map_svg(mw, mh, pictured):
 
     # pins
     R = 8.0
-    pins, orbit = [], []
+    pins, orbit, glob = [], [], []
     for s in pictured:
         if s.get("lat") is None or s.get("lon") is None:
-            orbit.append(s)
+            # only space stories go "in orbit"; place-less earthly stories get a GLOBAL box
+            (orbit if s.get("beat", "").lower() == "space" else glob).append(s)
             continue
         x, y = proj(float(s["lon"]), float(s["lat"]))
         pins.append({"n": s["n"], "c": RCOL[rkey(s["region"])], "ox": x, "oy": y, "x": x, "y": y})
@@ -234,6 +242,22 @@ def world_map_svg(mw, mh, pictured):
             import math
             a = math.radians(-60 - (i * 60 if k > 1 else 0))
             px, py = cx + rx * math.cos(a), cy + ry * math.sin(a)
+            pins.append({"n": s["n"], "c": RCOL[rkey(s["region"])], "ox": px, "oy": py, "x": px, "y": py,
+                         "fixed": True})
+    # "GLOBAL · ONLINE" box above the orbit ring, for stories with no real place (markets, online)
+    if glob:
+        k = len(glob)
+        bw, bh = max(78, 20 * k + 10), 30
+        # sits clear above the orbit ring and the pin on its rim (ring top = cy - 12)
+        bx0, by0 = 3, (proj(-135, -28)[1] - 12 - 22 - bh if orbit else mh - bh - 6)
+        out.append(f'<rect x="{bx0}" y="{by0:.1f}" width="{bw}" height="{bh}" rx="3" fill="{SEA_C}" '
+                   f'stroke="{INK}" stroke-width="1.1"/>')
+        out.append(f'<text x="{bx0 + bw / 2:.1f}" y="{by0 + bh - 4.5:.1f}" text-anchor="middle" '
+                   f'font-family="Barlow Condensed" font-weight="700" font-size="11" letter-spacing="0.3" '
+                   f'fill="{INK}">GLOBAL · ONLINE</text>')
+        for i, s in enumerate(glob):
+            px = bx0 + bw / 2 + (i - (k - 1) / 2) * 19
+            py = by0 + 10.5
             pins.append({"n": s["n"], "c": RCOL[rkey(s["region"])], "ox": px, "oy": py, "x": px, "y": py,
                          "fixed": True})
     # deterministic relaxation to separate overlapping pins
@@ -278,12 +302,24 @@ def world_map_svg(mw, mh, pictured):
 
 
 # ---------------------------------------------------------------- page
-# bottom band geometry (date-check band is 2 lines; the space goes to map + briefs)
-BAND_TOP = 778            # top of map and brief block
-DC_TOP, DC_H = 975, 32    # date-check band: 1px border + 3px pad + 2 x 13.6px lines
-BRIEF_GAP = 4             # min clear space between last brief row and the date-check band
-BRIEF_LH = 13.5           # min line pitch for brief rows
+# v2 geometry (all px). Masthead + region bar end at 119.
+M = 14                         # left/right margin
+TL_TOP, TL_H = 121, 42         # "THE DAY IN UTC" strip
+LEAD_TOP, LEAD_H, LEAD_PIC = 166, 253, 132
+GUT = 10                       # horizontal gutter between cards
+ROW_GAP = 6                    # vertical gap between card rows
+CARD_H, CARD_PIC = 147, 66
+ROW1 = LEAD_TOP + LEAD_H + ROW_GAP
+ROW2 = ROW1 + CARD_H + ROW_GAP
+SECT_TOP = ROW2 + CARD_H + 5   # bottom-band section heads
+BAND_TOP = SECT_TOP + 20       # top of map and brief block
+DC_TOP, DC_H = 975, 32         # date-check band: 1px border + 3px pad + 2 x 13.6px lines
+BRIEF_GAP = 4                  # min clear space between last brief row and the date-check band
 BRIEF_H = DC_TOP - BRIEF_GAP - BAND_TOP
+BRIEF_MIN_PITCH = 13.0         # rows closer than this are an error
+MAP_W = 340
+LEGEND_H = 28                  # two 13px legend lines + gap
+MAP_H = DC_TOP - 6 - LEGEND_H - BAND_TOP
 
 CSS = f"""
 *{{box-sizing:border-box;margin:0;padding:0}}
@@ -292,7 +328,6 @@ body{{position:relative;font-family:'Barlow',sans-serif;-webkit-font-smoothing:a
 .abs{{position:absolute}}
 .serif{{font-family:'DM Serif Display',serif;font-weight:400}}
 .cond{{font-family:'Barlow Condensed',sans-serif}}
-.caps{{text-transform:uppercase;letter-spacing:.06em}}
 .kick{{font-family:'Barlow Condensed';font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
   white-space:nowrap;line-height:14px}}
 .date{{left:14px;right:14px;top:13px;height:62px;text-align:center;font-size:61px;line-height:62px;white-space:nowrap;
@@ -303,42 +338,41 @@ body{{position:relative;font-family:'Barlow',sans-serif;-webkit-font-smoothing:a
 .bar{{left:14px;right:14px;top:102px;height:17px;display:flex;gap:2px}}
 .bar div{{color:#fff;font-family:'Barlow Condensed';font-weight:700;font-size:11.5px;letter-spacing:.07em;
   line-height:17px;text-align:center;white-space:nowrap;overflow:hidden}}
-.nums{{left:14px;right:14px;top:123px;height:43px;display:flex;border-bottom:1px solid {RULE}}}
-.num{{flex:1 1 0;display:flex;align-items:center;gap:7px;padding:0 8px;border-left:1px solid {RULE};overflow:hidden}}
-.num:first-child{{border-left:none;padding-left:2px}}
-.num b{{font-family:'DM Serif Display';font-weight:400;font-size:25px;line-height:28px;white-space:nowrap}}
-.num span{{font-family:'Barlow Condensed';font-weight:600;font-size:11px;line-height:12.5px;text-transform:uppercase;white-space:pre-line;
-  letter-spacing:.03em}}
-.tl{{left:14px;right:14px;top:170px;height:20px}}
-.tl .lab{{position:absolute;left:0;top:3px;font-family:'Barlow Condensed';font-weight:700;font-size:12px;
-  letter-spacing:.08em;white-space:nowrap}}
-.tl .line{{position:absolute;top:9.5px;height:1.5px;background:{INK}}}
-.tl .it{{position:absolute;top:2px;font-family:'Barlow Condensed';font-size:12px;line-height:15px;white-space:nowrap;
-  padding-left:9px;background:{PAPER};padding-right:5px}}
-.tl .it:before{{content:'';position:absolute;left:-4px;top:3.5px;width:8px;height:8px;border-radius:50%;
-  background:{INK}}}
-.tl .it b{{font-weight:700}}
+.tl{{left:{M}px;right:{M}px;top:{TL_TOP}px;height:{TL_H}px;border-bottom:1px solid {RULE}}}
+.tl .lab{{position:absolute;left:0;top:4px;width:62px;font-family:'Barlow Condensed';font-weight:700;font-size:13px;
+  line-height:15px;letter-spacing:.08em;white-space:nowrap}}
+.tl .line{{position:absolute;top:8px;height:1.5px;background:{INK}}}
+.tl .stop{{position:absolute;top:0;text-align:center;line-height:16px;font-size:0}}
+.tl .stop b{{display:block;width:fit-content;margin:0 auto;font-family:'Barlow Condensed';font-weight:700;font-size:14px;line-height:16px;
+  color:{ACCENT};background:{PAPER};padding:0 6px;letter-spacing:.02em;line-height:15px}}
+.tl .stop span{{display:block;font-family:'Barlow';font-size:12.5px;line-height:12.5px;color:{INK};margin-top:0}}
 .card{{background:#fbf8f1;border:1px solid {RULE};display:flex;flex-direction:column;overflow:hidden}}
 .ill{{position:relative;overflow:hidden;flex:none;background:#e9e2d3}}
 .ill > svg{{display:block}}
 .capband{{position:absolute;left:0;right:0;bottom:0;background:rgba(22,20,18,.86);color:#fff;
   font-family:'Barlow Condensed';font-weight:700;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;
   white-space:nowrap;overflow:hidden;padding:0 6px}}
-.kr{{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden}}
+.kr{{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;flex:none}}
 .badge{{flex:none;border-radius:50%;color:#fff;font-family:'Barlow Condensed';font-weight:700;text-align:center}}
-.hl{{font-family:'DM Serif Display';font-weight:400;color:{INK}}}
-.sub{{flex:none;font-family:'Barlow';font-size:12.5px;line-height:14.5px;color:#3a352e}}
-.tag{{flex:none;align-self:flex-start;font-family:'Barlow Condensed';font-weight:700;font-size:11.5px;line-height:13px;
-  letter-spacing:.03em;padding:1px 5px;border:1.3px solid;border-radius:2px;white-space:nowrap;overflow:hidden;
+.hl{{font-family:'DM Serif Display';font-weight:400;color:{INK};flex:none}}
+.sub{{flex:none;font-family:'Barlow';color:#3a352e}}
+.tag{{flex:none;align-self:flex-start;font-family:'Barlow Condensed';font-weight:700;
+  letter-spacing:.03em;border:1.3px solid;border-radius:2px;white-space:nowrap;overflow:hidden;
   max-width:100%;margin-top:auto;background:#fff}}
-.tag.confirmed{{color:{CONFIRMED_C};border-color:{CONFIRMED_C}}}
-.tag.claim{{color:{CLAIM_C};border-color:{CLAIM_C}}}
-.sect{{font-family:'Barlow Condensed';font-weight:700;font-size:12.5px;letter-spacing:.08em;line-height:14px;
+.confirmed{{color:{CONFIRMED_C};border-color:{CONFIRMED_C}}}
+.claim{{color:{CLAIM_C};border-color:{CLAIM_C}}}
+.sect{{font-family:'Barlow Condensed';font-weight:700;font-size:13px;letter-spacing:.08em;line-height:15px;
   white-space:nowrap;border-bottom:1px solid {INK};padding-bottom:2px}}
-.briefs{{display:flex;gap:12px}}
-.bcol{{flex:1 1 0;display:flex;flex-direction:column;justify-content:space-between;min-width:0}}
-.brief{{flex:none;font-family:'Barlow';font-size:12px;line-height:{BRIEF_LH}px;white-space:nowrap;overflow:hidden}}
-.brief .bn{{display:inline-block;width:18px;font-family:'Barlow Condensed';font-weight:700;font-size:12px}}
+.legend{{font-family:'Barlow Condensed';font-size:12px;line-height:13px;white-space:nowrap;overflow:hidden;color:#3a352e}}
+.legend .dot{{display:inline-block;width:8px;height:8px;border-radius:50%;margin:0 2px 0 0;vertical-align:0}}
+.legend .rg{{margin-right:5px}}
+.legend b{{font-weight:700;letter-spacing:.04em;color:{INK}}}
+.legend .mt{{display:inline-block;font-weight:700;font-size:11px;line-height:11px;padding:0 3px;border:1.2px solid;
+  border-radius:2px;background:#fff;letter-spacing:.03em;margin:0 3px 0 4px}}
+.briefs{{display:flex;gap:14px}}
+.bcol{{flex:1 1 0;display:flex;flex-direction:column;min-width:0}}
+.brief{{flex:none;font-family:'Barlow';white-space:nowrap;overflow:hidden}}
+.brief .bn{{display:inline-block;width:19px;font-family:'Barlow Condensed';font-weight:700}}
 .brief b{{font-weight:700}}
 .brief i{{color:#6b645a;font-style:italic}}
 .dc{{left:0;right:0;top:{DC_TOP}px;height:{DC_H}px;background:#e3ecdf;border-top:1px solid #9fb59a;
@@ -349,26 +383,43 @@ body{{position:relative;font-family:'Barlow',sans-serif;-webkit-font-smoothing:a
   line-height:14px;color:#4a443b;white-space:nowrap;overflow:hidden}}
 """
 
-# JS: fit headlines into their cards, fit briefs, then measure every text element.
+# JS: fit headlines/subheads into their cards, fit briefs, then measure every text element.
 JS = r"""
 (function(){
-function overflowing(el){var b=el.querySelector&&el.querySelector('.cbody');if(b&&el.classList.contains('card')&&b.scrollHeight>b.clientHeight+1)return true;return el.scrollHeight>el.clientHeight+1||el.scrollWidth>el.clientWidth+1;}
+var rep={small:[],overflow:[],warn:[],briefs:[],bbox:[],dclines:0,fonts:{}};
+function bodyOver(card){var b=card.querySelector('.cbody');return b.scrollHeight>b.clientHeight+1;}
+function overflowing(el){if(el.classList.contains('card')&&bodyOver(el))return true;return el.scrollHeight>el.clientHeight+1||el.scrollWidth>el.clientWidth+1;}
 function lines(el){var lh=parseFloat(getComputedStyle(el).lineHeight);return Math.round(el.getBoundingClientRect().height/lh);}
 document.querySelectorAll('[data-fit]').forEach(function(card){
-  var h=card.querySelector('.hl');if(!h)return;
-  var p=card.dataset.fit.split(','),s=parseFloat(p[0]),min=parseFloat(p[1]),maxl=parseInt(p[2]),ratio=parseFloat(p[3]);
-  while((overflowing(card)||lines(h)>maxl)&&s>min){s-=0.5;h.style.fontSize=s+'px';h.style.lineHeight=(s*ratio)+'px';}
+  var h=card.querySelector('.hl'),sub=card.querySelector('.sub'),n=card.dataset.n;
+  var p=card.dataset.fit.split(','),s0=parseFloat(p[0]),min=parseFloat(p[1]),maxl=parseInt(p[2]),ratio=parseFloat(p[3]);
+  var subOne=card.dataset.subone==='1';
+  if(sub&&subOne){  // one-line subhead: 12 -> 11.5 -> dropped
+    if(sub.scrollWidth>sub.clientWidth+1){sub.style.fontSize='11.5px';}
+    if(sub.scrollWidth>sub.clientWidth+1){rep.warn.push('card '+n+': subhead too wide even at 11.5px, dropped: '+sub.textContent);sub.remove();sub=null;}
+  }
+  if(sub&&!subOne&&lines(sub)>2)rep.warn.push('lead '+n+': subhead runs to '+lines(sub)+' lines (max 2)');
+  function fit(){var s=s0;h.style.fontSize=s+'px';h.style.lineHeight=(s*ratio)+'px';
+    while((bodyOver(card)||lines(h)>maxl)&&s>min){s-=0.5;h.style.fontSize=s+'px';h.style.lineHeight=(s*ratio)+'px';}}
+  fit();
+  if(sub&&subOne&&bodyOver(card)){  // headline needs its 3rd line: make room by dropping the subhead
+    rep.warn.push('card '+n+': subhead dropped to fit a 3-line headline: '+sub.textContent);sub.remove();sub=null;fit();}
+  if(lines(h)>maxl)rep.warn.push('card '+n+': headline is '+lines(h)+' lines (max '+maxl+') at '+h.style.fontSize);
+  if(bodyOver(card))rep.overflow.push('card '+n+' body overflows by '+(card.querySelector('.cbody').scrollHeight-card.querySelector('.cbody').clientHeight)+'px');
 });
 document.querySelectorAll('[data-fitw]').forEach(function(el){
   var p=el.dataset.fitw.split(','),s=parseFloat(p[0]),min=parseFloat(p[1]);
   while(el.scrollWidth>el.clientWidth+1&&s>min){s-=0.5;el.style.fontSize=s+'px';}
 });
-var rep={small:[],overflow:[],briefs:[],bbox:[],dclines:0,fonts:{}};
 document.querySelectorAll('.bar div[data-short]').forEach(function(el){
   if(el.scrollWidth>el.clientWidth+1)el.textContent=el.dataset.short;
 });
+document.querySelectorAll('.tl .stop span').forEach(function(el){
+  if(lines(el)>2)rep.warn.push('timeline label over 2 lines: '+el.textContent);
+  if(el.scrollWidth>el.clientWidth+1)rep.warn.push('timeline label too wide: '+el.textContent);
+});
 document.querySelectorAll('.brief').forEach(function(el){
-  if(el.scrollWidth>el.clientWidth+1){el.style.fontSize='12px';el.querySelector('.bn').style.fontSize='12px';}
+  if(el.scrollWidth>el.clientWidth+1){el.style.fontSize=BRIEF_MIN+'px';}
   if(el.scrollWidth>el.clientWidth+1)rep.briefs.push(el.textContent.trim()+' ['+(el.scrollWidth-el.clientWidth)+'px over]');
 });
 var dcEl=document.querySelector('.dc'),dcTop=dcEl.getBoundingClientRect().top;
@@ -379,13 +430,9 @@ document.querySelectorAll('.bcol').forEach(function(col){
     if(r.left<cr.left-0.5||r.right>cr.right+0.5||r.top<cr.top-0.5||r.bottom>cr.bottom+0.5)
       rep.bbox.push(t+' outside its column');
     if(r.bottom>dcTop-BRIEF_GAP+0.01)rep.bbox.push(t+' ends '+(r.bottom-(dcTop-BRIEF_GAP)).toFixed(1)+'px too low');
-    if(prev!==null&&r.top-prev<BRIEF_LH-0.01)rep.bbox.push(t+' line pitch '+(r.top-prev).toFixed(2)+'px');
+    if(prev!==null&&r.top-prev<BRIEF_MIN_PITCH-0.01)rep.bbox.push(t+' row pitch '+(r.top-prev).toFixed(2)+'px');
     prev=r.top;
   });
-});
-rep.numlines=[];document.querySelectorAll('.num span').forEach(function(el){
-  var n=Math.round(el.getBoundingClientRect().height/parseFloat(getComputedStyle(el).lineHeight));
-  if(n!==2)rep.numlines.push(el.textContent.replace(/\n/g,' / ')+': '+n+' lines');
 });
 rep.dclines=Math.round((dcEl.scrollHeight-4)/parseFloat(getComputedStyle(dcEl).lineHeight));
 document.querySelectorAll('[data-chk]').forEach(function(el){
@@ -411,7 +458,7 @@ var pre=document.getElementById('report');pre.textContent=JSON.stringify(rep);
 def fallback_illus(place, w, h):
     return (f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg">'
             f'<rect x="3" y="3" width="{w - 6}" height="{h - 6}" fill="#e2dccd" stroke="{RULE}" stroke-width="2"/>'
-            f'<text x="{w / 2}" y="{h / 2}" text-anchor="middle" font-family="Barlow Condensed" font-size="14" '
+            f'<text x="{w / 2}" y="{h / 2 + 5}" text-anchor="middle" font-family="Barlow Condensed" font-size="14" '
             f'fill="#7a7266">{esc(place)}</text></svg>')
 
 
@@ -423,40 +470,56 @@ def illus_for(s, w, h, ILLUS):
     return fn(w, h)
 
 
-def card_html(s, x, y, w, h, ih, lead, ILLUS):
-    rk = rkey(s["region"])
-    col = RCOL[rk]
+def status_of(s):
     st = s["status"].strip().lower()
     if st not in ("confirmed", "claim"):
         raise SystemExit(f"story {s['n']}: status must be confirmed|claim")
-    tsz = 11.5 if lead else 11
-    tlh = "" if lead else ";line-height:11px;padding:0 4px;border-width:1.2px"
-    tag = f'<div class="tag {st}" style="font-size:{tsz}px{tlh}" data-chk="tag {s["n"]}">{"CONFIRMED" if st == "confirmed" else "CLAIM"} · {esc(s["tag"])}</div>'
+    return st
+
+
+def card_html(s, x, y, w, h, ih, lead, ILLUS):
+    rk = rkey(s["region"])
+    col = RCOL[rk]
+    st = status_of(s)
     beat = esc(s.get("beat", "")).upper()
-    if lead:
-        hs, hmin, ratio, maxl, pad, bsz, ksz = 20.5, 17.0, 1.08, 3, 7, 18, 12
-        band = 17
-    else:
-        # medium card: 2 lines at 16px, shrinking to >= 14px; a 3rd line only if it still fits
-        hs, hmin, ratio, maxl, pad, bsz, ksz = 16, 14, 1.04, 3, 6, 13, 11
-        band = 16
-    kick = (f'<div class="kr" style="margin-top:{5 if lead else 2}px;height:{bsz}px;flex:none">'
+    if lead:  # headline 23px, 2 lines, shrinking to >= 20px; subhead 13px up to 2 lines
+        hs, hmin, ratio, maxl = 23, 20, 1.04, 2
+        pad, bsz, ksz, band, csz, tsz, tlh = 8, 17, 12, 16, 11.5, 12, 14
+        sub = (f'<div class="sub" style="font-size:13px;line-height:14px;margin-top:2px">{esc_nb(s["subhead"])}</div>'
+               if s.get("subhead") else "")
+    else:     # headline 16px up to 3 lines (>= 14.5px); one-line subhead 12px
+        hs, hmin, ratio, maxl = 16, 14.5, 1.03, 3
+        pad, bsz, ksz, band, csz, tsz, tlh = 6, 14, 11, 15, 11, 11, 11
+        sub = (f'<div class="sub" style="font-size:12px;line-height:13px;margin-top:1px;white-space:nowrap;'
+               f'overflow:hidden">{esc_nb(s["subhead"])}</div>' if s.get("subhead") else "")
+    tag = (f'<div class="tag {st}" data-chk="tag {s["n"]}" style="font-size:{tsz}px;line-height:{tlh}px;'
+           f'padding:0 {5 if lead else 4}px">{"CONFIRMED" if st == "confirmed" else "CLAIM"} · {esc(s["tag"])}</div>')
+    kick = (f'<div class="kr" style="margin-top:{5 if lead else 3}px;height:{bsz}px">'
             f'<div class="badge" style="width:{bsz}px;height:{bsz}px;line-height:{bsz}px;font-size:{ksz}px;'
             f'background:{col}">{s["n"]}</div>'
             f'<div class="kick" style="color:{col};font-size:{ksz}px">{RLAB[rk]} · {beat}</div></div>')
-    head = (f'<div class="hl" style="font-size:{hs}px;line-height:{hs * ratio:.2f}px;margin-top:{4 if lead else 1}px;flex:none">'
-            f'{esc(s["headline"])}</div>')
-    sub = ""
-    if lead and s.get("subhead"):
-        sub = f'<div class="sub" style="margin-top:3px">{esc(s["subhead"])}</div>'
-    cap = (f'<div class="capband" style="height:{band}px;line-height:{band}px;font-size:{11.5 if lead else 11}px">'
+    head = (f'<div class="hl" style="font-size:{hs}px;line-height:{hs * ratio:.2f}px;margin-top:{3 if lead else 1}px">'
+            f'{esc_nb(s["headline"])}</div>')
+    cap = (f'<div class="capband" style="height:{band}px;line-height:{band}px;font-size:{csz}px">'
            f'{esc(s["caption"])}</div>')
-    body = (f'<div class="cbody" style="flex:1;display:flex;flex-direction:column;padding:0 {pad}px {pad - 1 if lead else 2}px {pad}px;min-height:0">'
+    body = (f'<div class="cbody" style="flex:1;display:flex;flex-direction:column;padding:0 {pad}px {3 if lead else 3}px {pad}px;'
+            f'min-height:0;overflow:hidden">'
             f'{kick}{head}{sub}<div style="height:{3 if lead else 2}px;flex:none"></div>{tag}</div>')
-    return (f'<div class="abs card" data-chk="card {s["n"]}" data-fit="{hs},{hmin},{maxl},{ratio}" '
-            f'style="left:{x}px;top:{y}px;width:{w}px;height:{h}px">'
+    return (f'<div class="abs card" data-chk="card {s["n"]}" data-n="{s["n"]}" data-fit="{hs},{hmin},{maxl},{ratio}" '
+            f'data-subone="{0 if lead else 1}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px">'
             f'<div class="ill" style="width:{w - 2}px;height:{ih}px">{illus_for(s, w - 2, ih, ILLUS)}{cap}</div>'
             f'{body}</div>')
+
+
+def columns(n, gut):
+    """Integer x positions and widths for n equal columns between the margins."""
+    cw = (W - 2 * M - (n - 1) * gut) / n
+    out = []
+    for i in range(n):
+        x0 = round(M + i * (cw + gut))
+        x1 = round(M + i * (cw + gut) + cw)
+        out.append((x0, x1 - x0))
+    return out
 
 
 def build_html(d):
@@ -470,13 +533,21 @@ def build_html(d):
     briefs = sorted(d["briefs"], key=lambda s: s["n"])
     leads = [s for s in pictured if s.get("lead")]
     rest = [s for s in pictured if not s.get("lead")]
-    if len(leads) != 4 or len(rest) != 8:
-        raise SystemExit(f"need exactly 4 lead + 8 medium (non-lead) pictured stories, "
-                         f"got {len(leads)} + {len(rest)}")
-    if [s["n"] for s in pictured] != list(range(1, 13)):
-        raise SystemExit("pictured stories must be numbered 1..12")
-    if briefs and [b["n"] for b in briefs] != list(range(13, 13 + len(briefs))):
-        raise SystemExit("briefs must be numbered consecutively from 13")
+    if len(leads) != 3 or len(rest) != 10:
+        raise SystemExit(f"need exactly 3 lead + 10 non-lead pictured stories, got {len(leads)} + {len(rest)}")
+    if [s["n"] for s in pictured] != list(range(1, 14)):
+        raise SystemExit("pictured stories must be numbered 1..13")
+    if [s["n"] for s in leads] != [1, 2, 3]:
+        raise SystemExit(f"the 3 lead stories must be numbered 1..3, got {[s['n'] for s in leads]}")
+    if not 26 <= len(briefs) <= 36:
+        print(f"WARNING: {len(briefs)} briefs; the layout is sized for 26-36", file=sys.stderr)
+    if briefs and [b["n"] for b in briefs] != list(range(14, 14 + len(briefs))):
+        raise SystemExit("briefs must be numbered consecutively from 14")
+    tl = d["timeline"]
+    if not 6 <= len(tl) <= 8:
+        raise SystemExit(f"timeline needs 6-8 stops, got {len(tl)}")
+    for s in pictured + briefs:
+        status_of(s)
 
     counts = {k: 0 for k, _, _ in REGIONS}
     for s in pictured + briefs:
@@ -508,58 +579,69 @@ def build_html(d):
                   for (k, l, c, n), w in zip(segs, widths))
     P.append(f'<div class="abs bar">{bar}</div>')
 
-    # numbers
-    nums = "".join(f'<div class="num"><b style="color:{RCOL[rkey(n["region"])]}">{esc(n["value"])}</b>'
-                   f'<span>{esc(n["label"])}</span></div>' for n in d["numbers"][:6])
-    P.append(f'<div class="abs nums" data-chk="numbers">{nums}</div>')
-
-    # timeline
-    tl = d["timeline"]
-    x0, x1 = 118, W - 28 - 150
-    step = (x1 - x0) / max(1, len(tl) - 1)
-    items = []
+    # the day in UTC: stops evenly spaced on one rule
+    x0, x1 = 66, W - 2 * M        # stop slots span x0..x1 inside the strip
+    slot = (x1 - x0) / len(tl)
+    stops = []
     for i, t in enumerate(tl):
-        items.append(f'<div class="it" style="left:{x0 + i * step:.1f}px"><b>{esc(t["t"])}</b> {esc(t["label"])}</div>')
-    P.append(f'<div class="abs tl"><div class="lab">THE DAY IN UTC</div>'
-             f'<div class="line" style="left:{x0 - 8}px;width:{(len(tl) - 1) * step + 8:.1f}px"></div>{"".join(items)}</div>')
+        sx = x0 + i * slot
+        stops.append(f'<div class="stop" style="left:{sx:.1f}px;width:{slot:.1f}px"><b>{esc(t["t"])}</b>'
+                     f'<span style="padding:0 4px">{esc(t["label"])}</span></div>')
+    P.append(f'<div class="abs tl" data-chk="timeline"><div class="lab">THE DAY<br>IN UTC</div>'
+             f'<div class="line" style="left:{x0 + slot / 2 - 16:.1f}px;width:{(len(tl) - 1) * slot + 32:.1f}px"></div>'
+             f'{"".join(stops)}</div>')
 
-    # lead row
-    gap = 8
-    lw = (W - 28 - 3 * gap) / 4
-    for i, s in enumerate(leads):
-        P.append(card_html(s, round(14 + i * (lw + gap)), 196, round(lw), 256, 116, True, ILLUS))
-    # two rows of four medium cards, same columns as the lead row: 458-604 and 610-756
-    MH = 146
+    # lead row: 3 wide cards
+    for (x, w), s in zip(columns(3, GUT), leads):
+        P.append(card_html(s, x, LEAD_TOP, w, LEAD_H, LEAD_PIC, True, ILLUS))
+    # two rows of 5 cards
+    cols5 = columns(5, GUT)
     for i, s in enumerate(rest):
-        r, c = divmod(i, 4)
-        P.append(card_html(s, round(14 + c * (lw + gap)), 458 + r * (MH + 6), round(lw), MH, 80, False, ILLUS))
+        r, c = divmod(i, 5)
+        x, w = cols5[c]
+        P.append(card_html(s, x, ROW1 + r * (CARD_H + ROW_GAP), w, CARD_H, CARD_PIC, False, ILLUS))
 
-    # bottom band: map
-    mw, mh = 345, 176
-    P.append(f'<div class="abs sect" style="left:14px;top:760px;width:{mw}px">WHERE IT HAPPENED</div>')
-    P.append(f'<div class="abs" style="left:14px;top:{BAND_TOP}px;width:{mw}px;height:{mh}px;border:1px solid {RULE}">'
-             f'{world_map_svg(mw - 2, mh - 2, pictured)}</div>')
-    P.append(f'<div class="abs cond" style="left:14px;top:{BAND_TOP + mh + 2}px;width:{mw}px;font-size:11.5px;line-height:13px;'
-             f'color:#4a443b">Pins match story numbers · briefs {briefs[0]["n"]}–{briefs[-1]["n"]} at right have no pins'
-             f'</div>' if briefs else '')
+    # bottom band: map + legend
+    P.append(f'<div class="abs sect" style="left:{M}px;top:{SECT_TOP}px;width:{MAP_W}px">WHERE IT HAPPENED</div>')
+    P.append(f'<div class="abs" style="left:{M}px;top:{BAND_TOP}px;width:{MAP_W}px;height:{MAP_H}px;border:1px solid {RULE}">'
+             f'{world_map_svg(MAP_W - 2, MAP_H - 2, pictured)}</div>')
+    regs = "".join(f'<span class="rg"><span class="dot" style="background:{c}"></span>{esc(LSHORT.get(k, l))} {counts[k]}</span>'
+                   for k, l, c in REGIONS if counts[k])
+    sure = (f'<b>HOW SURE</b><span class="mt confirmed">CONFIRMED</span>2+ outlets or official record'
+            f'<span class="mt claim" style="margin-left:8px">CLAIM</span>one side says')
+    ly = BAND_TOP + MAP_H + 3
+    P.append(f'<div class="abs legend" data-chk="legend regions" data-fitw="12,11" style="left:{M}px;top:{ly}px;'
+             f'width:{MAP_W}px;height:13px">{regs}</div>')
+    P.append(f'<div class="abs legend" data-chk="legend sure" data-fitw="12,11" style="left:{M}px;top:{ly + 14}px;'
+             f'width:{MAP_W}px;height:14px">{sure}</div>')
 
-    # briefs
-    bx = 14 + mw + 16
-    bw = W - 14 - bx
-    P.append(f'<div class="abs sect" style="left:{bx}px;top:760px;width:{bw}px">ALSO ON {esc(short_date.upper())}</div>')
+    # briefs, two columns, rows spread evenly over the band
+    bx = M + MAP_W + 18
+    bw = W - M - bx
+    P.append(f'<div class="abs sect" style="left:{bx}px;top:{SECT_TOP}px;width:{bw}px">ALSO ON {esc(short_date.upper())}</div>')
     half = (len(briefs) + 1) // 2
     cols = [briefs[:half], briefs[half:]]
+    pitch = BRIEF_H / max(1, half)
+    if pitch < BRIEF_MIN_PITCH:
+        print(f"WARNING: {len(briefs)} briefs need {half} rows; row pitch {pitch:.1f}px is under "
+              f"{BRIEF_MIN_PITCH}px (fits {2 * int(BRIEF_H // BRIEF_MIN_PITCH)})", file=sys.stderr)
+    bfs = 13 if pitch >= 14 else 12.5
+    rowh = min(pitch, 17)
+    gaps = (BRIEF_H - rowh * half) / max(1, half - 1) if half > 1 else 0
 
-    def brief(b):
-        return (f'<div class="brief"><span class="bn" style="color:{RCOL[rkey(b["region"])]}">{b["n"]}</span>'
-                f'<b>{esc(b["place"])}</b> {esc(b["fact"])} <i>{esc(b["source"])}</i></div>')
-    bc = "".join(f'<div class="bcol">{"".join(brief(b) for b in col)}</div>' for col in cols)
+    def brief(b, last):
+        return (f'<div class="brief" style="font-size:{bfs}px;line-height:{rowh:.2f}px;height:{rowh:.2f}px;'
+                f'margin-bottom:{0 if last else gaps:.2f}px">'
+                f'<span class="bn" style="color:{RCOL[rkey(b["region"])]}">{b["n"]}</span>'
+                f'<b>{esc(b["place"])}</b> {esc_nb(b["fact"])} <i>{esc(b["source"])}</i></div>')
+    bc = "".join(f'<div class="bcol">{"".join(brief(b, j == len(col) - 1) for j, b in enumerate(col))}</div>'
+                 for col in cols)
     P.append(f'<div class="abs briefs" style="left:{bx}px;top:{BAND_TOP}px;width:{bw}px;height:{BRIEF_H}px">{bc}</div>')
 
     # date check
     dc = d["date_check"]
     def keep(x):  # never break inside "(20 Nov)"
-        return re.sub(r" (\([^)]*\))$", lambda m: "\u00a0" + m.group(1).replace(" ", "\u00a0"), esc(x))
+        return re.sub(r" (\([^)]*\))$", lambda m: " " + m.group(1).replace(" ", " "), esc(x))
     before = "; ".join(keep(x) for x in dc.get("before", []))
     later = "; ".join(keep(x) for x in dc.get("later", []))
     txt = (f'<span class="chip">DATE CHECK ✓</span>Every story on this page happened on '
@@ -576,7 +658,9 @@ def build_html(d):
 
     return (f'<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>{esc(date_label)}</title>'
             f'<style>{CSS}</style></head><body>{"".join(P)}'
-            f'<pre id="report" style="display:none"></pre><script>var BRIEF_GAP={BRIEF_GAP},BRIEF_LH={BRIEF_LH};{JS}</script></body></html>')
+            f'<pre id="report" style="display:none"></pre><script>var BRIEF_GAP={BRIEF_GAP},'
+            f'BRIEF_MIN_PITCH={BRIEF_MIN_PITCH},BRIEF_MIN=12.5;{JS}</script></body></html>')
+
 
 
 # ---------------------------------------------------------------- render
@@ -756,9 +840,8 @@ def main():
     for s in rep["bbox"]:
         print("ERROR: brief box not inside its column:", s)
         ok = False
-    for s in rep["numlines"]:
-        print("ERROR: number label is not exactly 2 lines:", s)
-        ok = False
+    for s in rep["warn"]:
+        print("WARNING:", s)
     if rep["dclines"] != 2:
         print(f"ERROR: date-check band is {rep['dclines']} lines, expected 2")
         ok = False
