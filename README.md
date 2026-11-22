@@ -26,6 +26,7 @@ What changed from v1:
 - Two new research sessions (g1, g2; `research/v2-g1.json`, `research/v2-g2.json`, notes in `research/v2-g*-notes.md`) added the Iranian strike on Bahrain, the M6.7 Peru quake, BepiColombo entering orbit around Mercury, Bitcoin's two-year low and the weekend rugby.
 - A calmer layout: 3 lead stories and 10 smaller cards (v1 had 4 and 8), with bigger type. The six-key-numbers strip is gone; the UTC timeline is now the only strip.
 - Items whose dates were disputed or turned out to be earlier than 21 November were dropped.
+- An independent re-check (vg2, `research/verify-v2.json`) corrected the Bahrain lead to what Bahrain itself said (an industrial fire, no site named; "Sitra" was only an Iranian claim) and credited the Tehran power-cut notice to AFP.
 
 ## How it is made
 
@@ -45,6 +46,6 @@ You need Python 3 with Pillow, and Google Chrome.
 
 ## Sources
 
-Reuters, AP, AFP, BBC, Al Jazeera, Guardian, EFE, Kyodo, ABC News, ESA, USGS and UKMTO. The briefs also cite Ukrinform, TVP, the Interior Ministry, ISNA, NDTV, PTI, CAF, Actualite.cd, KNA and Senapred. Each story's own source is printed on the image.
+Reuters, AP, AFP, BBC, Al Jazeera, Guardian, EFE, Kyodo, ABC News, ESA, USGS and UKMTO. The briefs also cite Ukrinform, TVP, the Interior Ministry, NDTV, PTI, CAF, Actualite.cd, KNA and Senapred. Each story's own source is printed on the image.
 
 Join make.fun: https://make.fun/r/68mq8j14

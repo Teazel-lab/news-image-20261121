@@ -1,0 +1,50 @@
+[
+  {
+    "item": 1,
+    "verdict": "fix",
+    "date_seen": "2026-11-21",
+    "source": "Al Jazeera",
+    "url": "https://www.aljazeera.com/news/2026/11/21/bahrain-says-iranian-attack-causes-fire-at-industrial-facility",
+    "note": "Bahrain named no site: industrial fire, no injuries. IRGC claimed two Patriot radars. Sitra is an IRNA interceptor claim."
+  },
+  {
+    "item": 2,
+    "verdict": "ok",
+    "date_seen": "2026-11-21",
+    "source": "France 24",
+    "url": "https://www.france24.com/en/france/20261121-france-s-sixth-consecutive-saturday-of-protests-draw-lower-turnout",
+    "note": "Interior Ministry: 82,500 on the sixth Saturday. Organisers counted 150,000."
+  },
+  {
+    "item": 3,
+    "verdict": "ok",
+    "date_seen": "2026-11-21",
+    "source": "POLITICO",
+    "url": "https://www.politico.eu/article/effort-regulate-killer-robots-delayed-until-2028-ai-un/",
+    "note": "128 CCW states agreed Saturday to elaborate an instrument by 2028, not adopt binding rules now."
+  },
+  {
+    "item": 4,
+    "verdict": "fix",
+    "date_seen": "2026-11-21",
+    "source": "AFP",
+    "url": "https://www.24newshd.tv/21-Nov-2026/iran-ration-electricity-war-hits-energy-network",
+    "note": "Tavanir announced Sunday cuts on state TV Saturday (AFP). ISNA quoted Pezeshkian on gas damage only."
+  },
+  {
+    "item": 5,
+    "verdict": "ok",
+    "date_seen": "2026-11-21",
+    "source": "Reuters",
+    "url": "https://www.reuters.com/business/aerospace-defense/us-denies-iranian-account-that-missile-damaged-f-16-over-gulf-2026-11-21/",
+    "note": "CENTCOM on Saturday: Iran did not attack an F-16 Friday; all Middle East fighter jets safe and accounted for."
+  },
+  {
+    "item": 6,
+    "verdict": "fix",
+    "date_seen": "2026-11-21",
+    "source": "The Daily Star; The Business Standard",
+    "url": "https://www.tbsnews.net/economy/rmg/labour-unrest-least-12-factories-declare-holiday-amid-work-abstention-savar-1609261",
+    "note": "Daily Star headline: at least 50 holidays (body: 'another 50'). TBS 4pm police update: at least 80 closed."
+  }
+]

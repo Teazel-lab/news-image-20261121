@@ -52,14 +52,14 @@
       "id": "bahrain-sitra-fire",
       "region": "Middle East",
       "beat": "Conflict",
-      "place": "Sitra, Bahrain",
-      "caption": "SITRA · STRIKE",
+      "place": "Bahrain",
+      "caption": "BAHRAIN · STRIKE",
       "lon": 50.62,
       "lat": 26.15,
-      "headline": "Bahrain says Iranian strike set Sitra site ablaze",
+      "headline": "Bahrain says Iranian attack sparked industrial fire",
       "subhead": "No injuries reported; IRGC claims it hit two US Patriot radars",
       "status": "confirmed",
-      "tag": "Reuters / AFP",
+      "tag": "Al Jazeera / Reuters",
       "lead": true
     },
     {
@@ -336,7 +336,7 @@
       "region": "Middle East",
       "place": "Tehran",
       "fact": "Power cuts set from Sunday",
-      "source": "ISNA/AFP",
+      "source": "AFP",
       "status": "confirmed"
     },
     {

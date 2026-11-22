@@ -189,7 +189,7 @@ def bahrain_sitra_fire(w, h):
     # Bahrain flag on a pole at the west end of the island
     b.append('<path d="M50 88 V46" stroke="%s" stroke-width="1.6"/>' % INK)
     b.append(_bahrain_flag(51, 46))
-    b.append(_label(10, 20, "SITRA, BAHRAIN", 15))
+    b.append(_label(10, 20, "BAHRAIN", 15))
     b.append(_label(174, 70, "FIRE", 15, bg="#a3271d"))
     return _svg(w, h, LEAD, defs, "".join(b))
 
